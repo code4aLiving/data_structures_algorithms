@@ -1,57 +1,22 @@
 import sys
+from graph import *
+from heap import *
 
-class GraphNode:
+class ShortestPathGraphNode(Node,HeapNode):
     def __init__(self, key, distance=sys.maxint, predecessor=None):
-        self.key = key
+        Node.__init__(self, key)
         self.distance = distance
         self.predecessor = predecessor
-
-    def __hash__(self):
-        return hash(self.key)
-
-    def __eq__(self, other):
-        return self.key == other.key
 
     def __str__(self):
         return "key: {0}, distance: {1}, predecessor: {2}".format(self.key,self.distance,self.predecessor)
 
-    def copy(self):
-        return GraphNode(self.key,self.distance,self.predecessor)
+    def get_heap_key(self):
+        return self.distance
 
-class Graph:
-    def __init__(self,edges):
-        self.vertices = {}
-        self.edges = {}
-        for u,v,w in edges:
-            if not self.vertices.has_key(u):
-                self.vertices[u]=GraphNode(u)
-            if not self.vertices.has_key(v):
-                self.vertices[v]=GraphNode(v)
-            self.edges[(u,v)] = float(w)        
-
-    def get_vertices(self):
-        for key,node in self.vertices.iteritems():
-            yield node
-
-    def get_edges(self):
-        for (u,v),w in self.edges.iteritems():
-            yield self.vertices[u],self.vertices[v],w
-
-    def copy(self):
-        edges = []
-        for uNode,vNode,w in self.get_edges():
-            edges.append((uNode.key,vNode.key,w))
-        return Graph(edges)
-
-    def get_node(self,key):
-        return self.vertices[key]
-
-    def vertices_count(self):
-        return len(self.vertices)
-
-    def edges_count(self):
-        return len(self.edges)
-                
+    def set_heap_key(self,distance):
+        self.distance = distance
+            
 def initialize_single_source(graph,s):
     for v in graph.get_vertices():
         v.distance = sys.maxint
@@ -63,12 +28,17 @@ def relax(graph,copyGraph,u,v,w):
         copyGraph.get_node(v.key).distance = u.distance + w
         copyGraph.get_node(v.key).predecessor = copyGraph.get_node(u.key)
 
+def relax(u, v, w):
+    if v.distance > u.distance + w:
+        v.distance = u.distance + w
+        v.predecessor = u
+
 def bellman_ford(graph, copyGraph, s):
     initialize_single_source(graph, s)
     initialize_single_source(copyGraph, s)
     for i in range(graph.vertices_count()-1):
         for u,v,w in graph.get_edges():
-            relax(graph, copyGraph, u, v, w)        
+            relax(graph, copyGraph, u, v, w)
         
         temp = graph
         graph = copyGraph
@@ -80,22 +50,52 @@ def bellman_ford(graph, copyGraph, s):
 
     return True
 
-E = int(raw_input())
-edges = []
-for i in range(E):
-    u,v,w = map(str,raw_input().strip().split(' '))
-    edges.append((u,v,float(w)))
+def dijkstra(graph, s):
+    initialize_single_source(graph,s)
+    q = MinPriorityQueue.from_heapNodes(graph.get_vertices())
+    S = set()
+    while q.heapSize > 0:
+        u = q.extract_min()
+        S.add(u)
+        for v in graph.get_adjs(u):
+            #relaxation
+            if v.distance > u.distance + graph.get_weight(u,v):
+                q.decrease_key(v, u.distance + graph.get_weight(u,v))
+                v.predecessor = u
 
-sKey = raw_input()
+def test_bellman_ford():
+    vertices = raw_input().strip().split(' ')
+    E = int(raw_input())
+    edges = []
+    weights = []
+    for i in range(E):
+        u,v,w = map(str,raw_input().strip().split(' '))
+        edges.append((u,v))
+        weights.append(float(w))
 
-graph = Graph(edges)
-copyGraph = Graph(edges)
+    sKey = raw_input()
+    graph = DirectedWeightedGraph(vertices,edges,weights,ShortestPathGraphNode)
+    copyGraph = DirectedWeightedGraph(vertices,edges,weights,ShortestPathGraphNode)
 
-res = bellman_ford(graph, copyGraph, sKey)
-for v in graph.get_vertices():
-    print v.key, v.distance, v.predecessor.key if v.predecessor is not None else 'Nil'
-print res
+    res = bellman_ford(graph, copyGraph, sKey)
+    for v in graph.get_vertices():
+        print v.key, v.distance, v.predecessor.key if v.predecessor is not None else 'Nil'
+    print res
 
+def test_dijkstra():
+    vertices = raw_input().strip().split(' ')
+    E = int(raw_input())
+    edges = []
+    weights = []
+    for i in range(E):
+        u,v,w = map(str,raw_input().strip().split(' '))
+        edges.append((u,v))
+        weights.append(float(w))
 
+    sKey = raw_input()
+    graph = DirectedWeightedGraph(vertices,edges,weights,ShortestPathGraphNode)
+    dijkstra(graph, sKey)
+    for v in graph.get_vertices():
+        print v.key, v.distance, v.predecessor.key if v.predecessor is not None else 'Nil'
         
         

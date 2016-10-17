@@ -1,3 +1,5 @@
+import sys
+sys.path.insert(0, '../DataStructures/')
 from graph import *
 import sys
 from collections import deque

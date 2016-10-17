@@ -1,6 +1,5 @@
 import sys
 from heapq import *
-from disjoint_sets_forest import *
 
 class TreeNode:
     def __init__(self,value,parent,adjValuesWeights):
@@ -31,14 +30,21 @@ class TreeNode:
     def __str__(self):
         return '{0} {1}'.format(self.value,self.adj)
 
-class Heap:
-    def __init__(self, nodes):
-        self.q = map(lambda x: (x.key,x), nodes)
+    def get_key_for_heap(self):
+        return self.key
+
+    def get_id(self):
+        return self.id
+
+class Heap(object):
+    def __init__(self, nodes, NodeClass):
+        self.q = map(lambda x: (x.get_key_for_heap(),x), nodes)
         heapify(self.q)
         self.d = {}
         for n in nodes:
             self.d[n.id] = n
         self.heapCount = len(nodes)
+        self.NodeClass = NodeClass
 
     def contains(self,nodeId):
         return self.d.has_key(nodeId)
@@ -58,8 +64,7 @@ class Heap:
         d = self.d
         d[node.id].removed = True
         d.pop(node.id)
-        newNode = TreeNode(node.id,node.p,node.adj)
+        newNode = NodeClass(node.get_id(),node.p,node.adj)
         newNode.key = newKey
-        d[newNode.id]=newNode
+        d[newNode.get_id()] = newNode
         heappush(self.q,(newNode.key,newNode))
-    
