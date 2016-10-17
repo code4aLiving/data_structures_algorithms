@@ -4,9 +4,9 @@ from graph import *
 import sys
 from collections import deque
 
-class BFSGraphNode(GraphNode):
+class BFSGraphNode(Node):
     def __init__(self,key):
-        GraphNode.__init__(self,key)
+        Node.__init__(self,key)
         self.distance = 0
         self.colour = 'WHITE'
         self.parent = None
@@ -36,12 +36,16 @@ def bfs(graph,s):
 
 n = int(raw_input('Enter the number of edges '))
 edges = []
+vertices = set()
 for i in range(n):
     (u,v) = raw_input().strip().split(' ')
     edges.append((u,v))
-
-graph = UndirectedGraph(edges, BFSGraphNode)
-bfs(graph, graph.get_node('s'))
+    vertices.add(u)
+    vertices.add(v)
+    
+vetices = list(vertices)
+graph = UndirectedGraph(vertices, edges, BFSGraphNode)
+bfs(graph, graph.get_node(raw_input('enter the root node ')))
 print ''
 for v in graph.get_vertices():
     print v

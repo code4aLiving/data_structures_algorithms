@@ -31,7 +31,6 @@ def dfs_visit_build_topological_sort(graph, u, top_sort):
     top_sort.appendleft(u)
 
 def test_topological_sort():
-
     vertices = raw_input().strip().split(' ')
     n = int(raw_input('Enter the number of edges '))
     edges = []

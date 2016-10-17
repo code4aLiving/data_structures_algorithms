@@ -2,9 +2,9 @@ import sys
 sys.path.insert(0, '../DataStructures/')
 from graph import *
 
-class DFSGraphNode(GraphNode):
+class DFSGraphNode(Node):
     def __init__(self,key):
-        GraphNode.__init__(self, key)
+        Node.__init__(self, key)
         self.colour = ''
         self.parent = None
         self.d = 0
@@ -39,11 +39,14 @@ def dfs_visit(graph, u):
 def test_dfs():
     n = int(raw_input('Enter the number of edges '))
     edges = []
+    vertices = set()
     for i in range(n):
         (u,v) = raw_input().strip().split(' ')
         edges.append((u,v))
-
-    graph = DirectedGraph(edges,DFSGraphNode)
+        vertices.add(u)
+        vertices.add(v)
+    vertices = list(vertices)
+    graph = DirectedGraph(vertices,edges,DFSGraphNode)
     dfs(graph)
     print ''
     for v in graph.get_vertices():

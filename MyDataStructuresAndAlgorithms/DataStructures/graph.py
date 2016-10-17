@@ -1,77 +1,90 @@
 
-class GraphNode:
+class Node:
     def __init__(self, key):
-        self.colour = ''
-        self.parent = None
         self.key = key
 
     def __hash__(self):
         return hash(self.key)
 
-    def __eq__(self, key):
+    def __eq__(self, other):
         return self.key == other.key
 
-class Graph:
-    def __init__(self,edges):
+    def __str__(self):
+        return str(self.key)
+
+    def get_id(self):
+        return self.key    
+
+class Graph(object):
+    def __init__(self, vertices, edges, GraphNodeClass):
         self.vertices = {}
         self.adjList = {}
-        for u,v in edges:
-            if not self.vertices.has_key(u):
-                self.vertices[u] = GraphNode(u)
-                self.adjList[self.vertices[u]] = []
-            if not self.vertices.has_key(v):
-                self.vertices[v] = GraphNode(v)
-                self.adjList[self.vertices[v]] = []
+        for v in vertices:
+            self.vertices[v] = GraphNodeClass(v)
+            self.adjList[self.vertices[v]] = []
+
+    def get_vertices(self):
+        vertices = [node for key, node in self.vertices.iteritems()]
+        return vertices
+
+    def get_adjs(self, node):
+        return self.adjList[node]
+
+    def get_node(self, key):
+        return self.vertices[key]
+
+    def vertices_count(self):
+        return len(self.vertices)
 
 class UndirectedGraph(Graph):
-    def __init__(self, edges):
-        Graph.__init__(self,edges)
-        self.__init_edges__()
+    def __init__(self, vertices, edges, GraphNodeClass):
+        Graph.__init__(self,vertices, edges, GraphNodeClass)
+        self.__init_adjList__(edges)
         
     def __init_adjList__(self,edges):
         for u,v in edges:
             self.adjList[self.vertices[u]].append(self.vertices[v])
-            self.adjList[sefl.vertices[v]].append(self.vertices[u])
+            self.adjList[self.vertices[v]].append(self.vertices[u])
 
-def DirectedGraph(Graph):
-    def __init__(self, edges):
-        Graph.__init__(self,edges)
-        self.__init_edges__()
+class DirectedGraph(Graph):
+    def __init__(self, vertices, edges, GraphNodeClass):
+        Graph.__init__(self, vertices, edges, GraphNodeClass)
+        self.__init_adjList__(edges)
 
-    def __init_adjList__(self):
+    def __init_adjList__(self, edges):
         for u,v in edges:
             self.adjList[self.vertices[u]].append(self.vertices[v])
         
-
-class WeightedGraph(Graph):
-    def __init__(self,edges,weights):
-        Graph.__init__(self,edges)
+class WeightedGraph(UndirectedGraph):
+    def __init__(self, vertices, edges, weights, GraphNodeClass):
+        UndirectedGraph.__init__(self, vertices, edges, GraphNodeClass)
         self.edges = {}
-        self.__init_adjList__()
+        self.__init_edges__(edges, weights)
+
+    def __init_edges__(self, edges, weights):
+        for i in range(len(weights)) :
+            (u,v) = edges[i]
+            self.edges[(self.vertices[u],self.vertices[v])]=weights[i]
+            self.edges[(self.vertices[v],self.vertices[u])]=weights[i]
+
+    def get_edges(self):
+        for (u,v),w in self.edges.iteritems():
+            yield u,v,w
+
+    def get_weight(self,u,v):
+        return self.edges[(u,v)]
+
+    def edges_count(self):
+        return len(self.edges)
+            
+
+class DirectedWeightedGraph(DirectedGraph, WeightedGraph):
+    def __init__(self,vertices, edges, weights, GraphNodeClass):
+        DirectedGraph.__init__(self, vertices, edges, GraphNodeClass)
+        self.edges = {}
+        self.__init_edges__(edges,weights)
+    
+    def __init_edges__(self, edges, weights):
         for i in range(len(weights)):
             (u,v) = edges[i]
             self.edges[(self.vertices[u],self.vertices[v])]=weights[i]
-
-    def __init_adjList__(self):
-        for u,v in edges:
-            self.edges[self.vertices[u]].append(self.vertices[v])
-            self.edges[sefl.vertices[v]].append(self.vertices[u])
-
-class DirectedWeightedGraph(Graph):
-    def __init__(self,edges,weights):
-        Graph.__init__(self,edges)
-        self.edges = {}
-        self.__init_adjList__()
-        for i in range(len(weights)):
-            (u,v) = edges[i]
-            self.edges[(self.vertices[u],self.vertices[v])]=weights[i]
-
-    def __init_adjList__(self):
-        for u,v in edges:
-            self.edges[self.vertices[u]].append(self.vertices[v])
-            self.edges[sefl.vertices[v]].append(self.vertices[u])
-
-    
-        
-        
-    
