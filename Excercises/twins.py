@@ -6,10 +6,15 @@ def solve(n,m):
         return 0
     primes = SoE(int(sqrt(m)))
     boolTable = [True for x in range(m-n+1)]
+    if n == 1:
+        boolTable[0]=False
     res = 0
     for p in primes:
-        c = max(n/p+1,2)
+        c = n/p
         while p*c <= m:
+            if p*c < n or c == 1:
+                c+=1
+                continue            
             #print p*c-n
             boolTable[p*c-n]=False
             c+=1
@@ -59,5 +64,5 @@ def test():
         m = r.randint(10,20)
         print n,m,solve2(n,m),solve(n,m)
 
-n,m = map(int,raw_input().split(' '))
-print solve(n,m)
+#n,m = map(int,raw_input().split(' '))
+#print solve(n,m)
