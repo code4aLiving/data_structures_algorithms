@@ -87,3 +87,18 @@ def find_set(node):
 ##print ds.find_set('C').key,ds.find_set('I').key, list(ds.sets.keys())
 ##ds.union('I','G')
 
+def solve(graph):
+    pass
+
+t = int(raw_input().strip())
+for a0 in xrange(t):
+    n,m = raw_input().strip().split(' ')
+    n,m = [int(n),int(m)]
+    graph = {}
+    for a1 in xrange(m):
+        x,y = raw_input().strip().split(' ')
+        x,y = [int(x),int(y)]
+        graph.setdefault(x,[y]).append(y)
+        graph.setdefault(y,[x]).append(x)
+        
+
