@@ -1,30 +1,20 @@
-
+import sys
 
 def equal_chocolate(a):
     #da = list(set(a))
-    a.sort()
-    res = 0
-    for i in range(len(a)-1):
-        res += reduce(a,i)
-        print(a)
+    mini = min(a)
+    A = [mini-x for x in range(5)]
+    res = sys.maxsize
+    for x in A:
+        res = min(res,reduce(x,a))
     return res
 
-def reduce(a,i):
-    maxi = a[i+1]
-    mini = a[i]
-    res5 = (maxi-mini)//5
-    maxi -= res5*5
-    res = res5
-    print(res)
-    res2 = (maxi-mini)//2
-    maxi -= res2*2
-    res += res2
-    print(res)
-    res += maxi - mini
-    a[i+1]=mini
-    print(res)
+def reduce(mini, a):
+    res = 0
+    for ai in a:
+        x = ai - mini
+        res += x//5 +(x%5)//2 + (x%5)%2
     return res
-    
 
 t = int(input())
 for x in range(t):
