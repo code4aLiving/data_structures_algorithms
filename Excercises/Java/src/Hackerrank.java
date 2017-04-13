@@ -150,4 +150,32 @@ public class Hackerrank {
         return table;
     }
 
+    class Pole
+    {
+        public int weight,position;
+        public Pole(int weightP, int positionP){
+            weight = weightP;
+            position = positionP;
+        }
+    }
+    private static int poles(int n, int s, int k, Pole [] poles){
+        int [] sumWeights = new int[poles.length];
+        int [] sumWX = new int[poles.length];
+        sumWeights[0]=poles[0].weight;
+        sumWX[0]=poles[0].weight*poles[0].position;
+        for (int i =1; i<poles.length; i++){
+            sumWeights[i] = sumWeights[i-1] + poles[i].weight;
+            sumWX[i] = sumWX[i-1] + poles[i].weight*poles[i].position;
+        }
+
+        int [][] table = new int [n][k];
+
+
+        return 0;
+    }
+
+    private static int move(int a, int b, int[] sumWeights, int [] sumWX, Pole [] poles){
+        return (sumWX[b]-sumWX[a])-poles[a].weight*(sumWeights[b]-sumWeights[a]);
+    }
+
 }

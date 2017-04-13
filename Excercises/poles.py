@@ -1,6 +1,6 @@
 
 
-def solve(n,k):
+def solve(n,k,poles):
     table = [[0 for x in range(n+1)] for x in range(k+1)]
     for col in range(1,n+1):
         for row in range(1,k+1):
@@ -13,6 +13,7 @@ def solve(n,k):
             else:
                 r = -10**7
                 for i in range(col):
+                    poles[i+1:]
                     r = min(r,table[row-1][i] + 
             
     
