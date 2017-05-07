@@ -40,3 +40,4 @@ for i in range(1,n):
     sumWX[i] = sumWX[i-1]+w[i]*x[i]
 
 print(solve(n,0,k,w,x))
+
