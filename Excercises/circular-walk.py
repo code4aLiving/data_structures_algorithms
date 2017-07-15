@@ -14,8 +14,9 @@ def circularWalk(n, s, t, r_0, g, seed, p):
     left,right = s+n,s+n
     r = compute_r(n, r_0, g, seed, p)
     q = [(s+n,0)]
+    visited = set([s])
     while len(q):
-        #print(left,right,q)
+        print(left,right,q)
         current, d = q.pop(0)
         currentLeft = current - r[current % n]
         currentRight = current + r[current % n]
@@ -29,9 +30,17 @@ def circularWalk(n, s, t, r_0, g, seed, p):
             return d+1
                 
         for i in range(currentLeft,left):
+            if i%n in visited:
+                break
+            print(i)
             q.append((i, d+1))
+            visited.add(i%n)
         for i in range(right + 1, currentRight + 1):
+            if i%n in visited:
+                break
+            print(i)
             q.append((i, d+1))
+            visited.add(i%n)
         #print(q)
         left = min(currentLeft, left)
         right = max(currentRight, right)
