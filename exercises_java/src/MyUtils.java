@@ -24,7 +24,7 @@ public class MyUtils {
 
     }
 
-    private static void printarray(Integer [] arr){
+    public static void printarray(Integer [] arr){
         for (int i = 0; i < arr.length; i++) {
             System.out.print(String.format("%d ",arr[i]));
         }
@@ -77,7 +77,7 @@ public class MyUtils {
         return i+1;
     }
 
-    private static void swap(int i, int j, Object[] arr){
+    public static void swap(int i, int j, Object[] arr){
         Object temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
