@@ -82,4 +82,51 @@ public class MyUtils {
         arr[i] = arr[j];
         arr[j] = temp;
     }
+
+    /** Each query is of the form l,r
+     * The result is an array where position i is the sum of all the elemnts of arr
+     * between qi_l and qi_r*/
+    public static int[] partialSums(int [] arr, int[][] queries){
+        int [] sums = new int[arr.length];
+        sums[0] = arr[0];
+        for (int i = 1; i < arr.length; i++) {
+            sums[i] = sums[i-1] + arr[i];
+        }
+        int [] res = new int[queries.length];
+        for (int i = 0; i < queries.length; i++) {
+            int l = queries[i][0];
+            int r = queries[i][1];
+
+            if (l == 0)
+                res[i] = sums[r];
+            else
+                res[i] = sums[r] - sums[l-1];
+        }
+        return res;
+    }
+    /** Each query is of the form l,r,v
+     * For each query add v to every element of arr which indexes are between l and r,
+     * inclusive*/
+    public static int[] partialSumsIncrement(int [] arr, int[][] queries){
+
+        //Create a zeros array
+        int [] temp = new int[arr.length];
+
+        for (int i = 0; i < queries.length; i++) {
+            int l = queries[i][0];
+            int r = queries[i][1];
+            int v = queries[i][2];
+
+            temp[l] += v;
+            if (r < temp.length - 1)
+                temp[r+1] -= v;
+        }
+        int [] res = new int[arr.length];
+        res[0] = arr[0] + temp[0];
+        for (int i = 1; i < temp.length; i++) {
+            temp[i] += temp[i-1];
+            res[i] = arr[i] + temp[i];
+        }
+        return res;
+    }
 }
