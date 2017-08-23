@@ -7,16 +7,16 @@ import java.util.*;
 
 public class MyLinkedList<T extends Comparable<T>> extends AbstractSequentialList<T>
         implements Iterable<T>, Collection<T>, Deque<T>, List<T>, Queue<T> {
-    protected Node<T> _nil;
+    protected ListNode<T> _nil;
     protected int _size;
 
-    public Node<T> getNil(){
+    public ListNode<T> getNil(){
         return _nil;
     }
 
     public MyLinkedList(){
         super();
-        _nil = new Node(null, null, null);
+        _nil = new ListNode(null, null, null);
         _nil.setNext(_nil);
         _nil.setPrev(_nil);
     }
@@ -31,7 +31,7 @@ public class MyLinkedList<T extends Comparable<T>> extends AbstractSequentialLis
     @Override
     public ListIterator<T> listIterator(int index) {
         ListIterator<T> it = new ListIterator<T>() {
-            Node<T> current = _nil.getNext();
+            ListNode<T> current = _nil.getNext();
             int index = 0;
             @Override
             public boolean hasNext() {
@@ -40,7 +40,7 @@ public class MyLinkedList<T extends Comparable<T>> extends AbstractSequentialLis
 
             @Override
             public T next() {
-                T val = current.getValue();
+                T val = current.get_value();
                 current = current.getNext();
                 index++;
                 return val;
@@ -86,7 +86,7 @@ public class MyLinkedList<T extends Comparable<T>> extends AbstractSequentialLis
 
     @Override
     public void addFirst(T t) {
-        Node<T> node = new Node(t, _nil.getNext(), _nil);
+        ListNode<T> node = new ListNode(t, _nil.getNext(), _nil);
         _nil.getNext().setPrev(node);
         _nil.setNext(node);
         _size++;
@@ -94,7 +94,7 @@ public class MyLinkedList<T extends Comparable<T>> extends AbstractSequentialLis
 
     @Override
     public void addLast(T t) {
-        Node<T> node = new Node(t, _nil, _nil.getPrev());
+        ListNode<T> node = new ListNode(t, _nil, _nil.getPrev());
         _nil.getPrev().setNext(node);
         _nil.setPrev(node);
         _size++;
@@ -119,11 +119,11 @@ public class MyLinkedList<T extends Comparable<T>> extends AbstractSequentialLis
     public T removeLast() {
         if (_nil.getPrev() == _nil)
             throw new EmptyStackException();
-        Node<T> resNode = _nil.getPrev();
+        ListNode<T> resNode = _nil.getPrev();
         resNode.getPrev().setNext(resNode.getNext());
         resNode.getNext().setPrev(resNode.getPrev());
         _size--;
-        return resNode.getValue();
+        return resNode.get_value();
     }
 
     @Override
@@ -210,7 +210,7 @@ public class MyLinkedList<T extends Comparable<T>> extends AbstractSequentialLis
     @Override
     public Iterator<T> descendingIterator() {
         Iterator<T> it = new Iterator<T>() {
-            Node<T> current = _nil.getNext();
+            ListNode<T> current = _nil.getNext();
             @Override
             public boolean hasNext() {
                 return current != _nil;
@@ -218,7 +218,7 @@ public class MyLinkedList<T extends Comparable<T>> extends AbstractSequentialLis
 
             @Override
             public T next() {
-                T val = current.getValue();
+                T val = current.get_value();
                 current = current.getNext();
                 return val;
             }

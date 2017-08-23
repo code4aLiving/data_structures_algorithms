@@ -1,3 +1,4 @@
+import datastructures.ListNode;
 import datastructures.MyLinkedList;
 import datastructures.Node;
 
@@ -25,14 +26,14 @@ public class MergeSortedLinkedLists{
     }
 
     public static MyLinkedList<Integer> mergeSortedLinkedLists(MyLinkedList<Integer> list1, MyLinkedList<Integer> list2){
-        Node<Integer> node1 = list1.getNil().getNext();
-        Node<Integer> node2 = list2.getNil().getNext();
+        ListNode<Integer> node1 = list1.getNil().getNext();
+        ListNode<Integer> node2 = list2.getNil().getNext();
 
         MyLinkedList<Integer> res = new MyLinkedList();
 
-        while(node1.getValue() != null || node2.getValue() != null) {
-            Integer v1 = node1.getValue();
-            Integer v2 = node2.getValue();
+        while(node1.get_value() != null || node2.get_value() != null) {
+            Integer v1 = node1.get_value();
+            Integer v2 = node2.get_value();
             if (v1 == null || (v2 != null && v2 < v1)) {
                 res.addLast(v2);
                 node2 = node2.getNext();
