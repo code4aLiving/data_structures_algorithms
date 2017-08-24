@@ -102,16 +102,17 @@ public class MyUtils {
         return binarySearchClosest(arr, x, 0, arr.length-1);
     }
 
-    public static int binarySearchClosest(int [] arr, int x, int start, int end){
+    public static int binarySearchClosest(int [] arr, int x, int start, int end) {
         if (start >= end) {
             return start;
         }
-        int middle = (start + end)/2;
+        int middle = (start + end) / 2;
         if (x <= arr[middle])
             return binarySearchClosest(arr, x, start, middle);
-        if (arr[middle] < arr[middle+1] && Math.abs(x - arr[middle]) <= Math.abs(x - arr[middle + 1]))
+        if (arr[middle] < arr[middle + 1] && Math.abs(x - arr[middle]) <= Math.abs(x - arr[middle + 1]))
             return middle;
         return binarySearchClosest(arr, x, middle + 1, end);
+    }
    
      public static Integer[] quicksort(Integer[] arr){
         Integer [] res = new Integer[arr.length];
