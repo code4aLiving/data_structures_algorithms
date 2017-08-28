@@ -30,6 +30,12 @@ public class MyUtils {
         }
     }
 
+    public static void printarray(int [] arr){
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(String.format("%d ",arr[i]));
+        }
+    }
+
     public static int min(int [] a){
         int res = Integer.MAX_VALUE;
         for (int x:a) {
