@@ -30,6 +30,12 @@ public class MyUtils {
         }
     }
 
+    public static void printarray(int [] arr){
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(String.format("%d ",arr[i]));
+        }
+    }
+
     public static int min(int [] a){
         int res = Integer.MAX_VALUE;
         for (int x:a) {
@@ -48,7 +54,73 @@ public class MyUtils {
         return res;
     }
 
-    public static Integer[] quicksort(Integer[] arr){
+    public static int binarySearchLower(int [] arr, int x){
+        return binarySearchLower(arr, x, 0, arr.length-1);
+    }
+
+    public static int binarySearchLower(int [] arr, int x, int start, int end){
+        if (start > end)
+            return -1;
+        if (start == end){
+            if (x == arr[start])
+                return start;
+            return -1;
+        }
+
+        int middle = (start + end) / 2;
+        if (x <= arr[middle])
+            return binarySearchLower(arr, x, start, middle);
+        return binarySearchLower(arr, x, middle + 1, end);
+    }
+
+    public static int binarySearchUpper(int [] arr, int x){
+        return binarySearchUpper(arr, x, 0, arr.length -1);
+    }
+
+    public static int binarySearchUpper(int [] arr, int x, int start, int end){
+        if (start > end)
+            return -1;
+        if (start == end) {
+            if (x == arr[start])
+                return start;
+            return -1;
+        }
+
+        int middle = (start+end)/2;
+        if (x >= arr[middle]){
+            if (x == arr[middle] && arr[middle+1] > x)
+                return middle;
+            return binarySearchUpper(arr, x, middle + 1, end);
+        }
+        return binarySearchUpper(arr, x, start, middle-1);
+    }
+
+    public static boolean binarySearch(int [] arr, int x){
+        return binarySearch(arr, x, 0, arr.length - 1);
+    }
+
+    public static boolean binarySearch(int [] arr, int x, int start, int end){
+        int index = binarySearchLower(arr, x, start, end);
+        return index >= start && index <= end;
+    }
+
+    public static int binarySearchClosest(int [] arr, int x){
+        return binarySearchClosest(arr, x, 0, arr.length-1);
+    }
+
+    public static int binarySearchClosest(int [] arr, int x, int start, int end) {
+        if (start >= end) {
+            return start;
+        }
+        int middle = (start + end) / 2;
+        if (x <= arr[middle])
+            return binarySearchClosest(arr, x, start, middle);
+        if (arr[middle] < arr[middle + 1] && Math.abs(x - arr[middle]) <= Math.abs(x - arr[middle + 1]))
+            return middle;
+        return binarySearchClosest(arr, x, middle + 1, end);
+    }
+   
+     public static Integer[] quicksort(Integer[] arr){
         Integer [] res = new Integer[arr.length];
         System.arraycopy(arr, 0, res, 0, arr.length);
         quicksort(res, 0, res.length - 1);
