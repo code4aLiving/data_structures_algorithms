@@ -96,11 +96,12 @@ public class StringReduction {
             }
             else{
                 if (res.get_first() > left.get_first() + right.get_first()){
-                    char [] concat = Arrays.
+
                 }
 
             }
 
         }
+        return null;
     }
 }
