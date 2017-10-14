@@ -24,6 +24,11 @@ public abstract class Node<T extends Comparable<T>> implements Comparable<Node<T
     }
 
     @Override
+    public int hashCode(){
+        return _value.hashCode();
+    }
+
+    @Override
     public int compareTo(@NotNull Node<T> other) {
         return _value.compareTo(other.get_value());
     }
