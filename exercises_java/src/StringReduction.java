@@ -38,23 +38,45 @@ public class StringReduction {
 
         final int start = i;
 
-        return new Iterable<String>() {
-            @NotNull
+        return () -> new Iterator<String>() {
+            int i = start;
             @Override
-            public Iterator<String> iterator() {
-                return new Iterator<String>() {
-                    int i = start;
-                    @Override
-                    public boolean hasNext() {
-                        return i < s.length()-1;
-                    }
+            public boolean hasNext() {
+                return i < s.length()-1;
+            }
 
-                    @Override
-                    public String next() {
-                        char[] current = s.toCharArray();
-                        return null;
-                    }
-                };
+            @Override
+            public String next() {
+                char[] current = s.toCharArray();
+                char[] newString = new char[current.length-1];
+                for (int j=0; j<i; j++)
+                    newString[j]=current[i];
+                if (current[i] == 'a'){
+                    if (current[i+1] == 'b')
+                        newString[i] = 'c';
+                    else
+                        newString[i] = 'b';
+                }
+                if (current[i] == 'b'){
+                    if (current[i+1] == 'a')
+                        newString[i] = 'c';
+                    else
+                        newString[i] = 'a';
+                }
+
+                if (current[i] == 'c'){
+                    if (current[i+1] == 'a')
+                        newString[i] = 'b';
+                    else
+                        newString[i] = 'a';
+                }
+
+                for (int j=i+2; j<current.length; j++)
+                    newString[j-1] = current[j];
+
+                while (i < s.length() - 1 && s.charAt(i) == s.charAt(i+1))
+                    i++;
+                return new String(newString);
             }
         };
     }
