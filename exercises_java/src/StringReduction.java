@@ -1,12 +1,16 @@
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
-import datastructures.Tuple;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.*;
 
 public class StringReduction {
 
     public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        int q = sc.nextInt();
+        sc.nextLine();
+        for (int i=0; i<q; i++){
+            String s = sc.nextLine();
+            System.out.println(stringReductionBruteForce(s));
+            System.out.println(stringReductionDP(s));
+        }
 
     }
 
@@ -20,6 +24,8 @@ public class StringReduction {
         while(queue.size() > 0){
             String current = queue.poll();
             res = Math.min(res, current.length());
+            if(res == 1)
+                return res;
             for (String neighbor: getNeighbors(current)){
                 if (visited.contains(neighbor))
                     continue;
@@ -50,7 +56,7 @@ public class StringReduction {
                 char[] current = s.toCharArray();
                 char[] newString = new char[current.length-1];
                 for (int j=0; j<i; j++)
-                    newString[j]=current[i];
+                    newString[j]=current[j];
                 if (current[i] == 'a'){
                     if (current[i+1] == 'b')
                         newString[i] = 'c';
@@ -74,56 +80,67 @@ public class StringReduction {
                 for (int j=i+2; j<current.length; j++)
                     newString[j-1] = current[j];
 
-                while (i < s.length() - 1 && s.charAt(i) == s.charAt(i+1))
+                do {
                     i++;
+                }while(i < s.length() - 1 && s.charAt(i) == s.charAt(i+1));
+
                 return new String(newString);
             }
         };
     }
 
-    private static Tuple<Integer, char[]> stringReductionRecursive(char [] s, int start, int end){
+    private static int[][][] canTable;
+    private static int inf = 10000000;
+    public static Boolean can(String s, int start, int end, char c){
 
-        if (start == end) {
-            char [] res = new char[] {s[start]};
-            return new Tuple<Integer, char[]>(1, res);
+        int charValue = c - 'a';
+        if (start == end)
+            return s.charAt(start) == c;
+
+        if (canTable[charValue][start][end] != 0)
+            return canTable[charValue][start][end] > 0;
+        char u = 'a';
+        char v = 'b';
+        if (c == 'a') {
+            u = 'b';
+            v = 'c';
+        }
+        if (c == 'b') {
+            u = 'a';
+            v = 'c';
+        }
+        if (c == 'c') {
+            u = 'a';
+            v = 'b';
         }
 
-        if (end - start == 1){
-            char [] res;
-            if (s[start] != s[end]){
-                res = new char[1];
-                if (s[start] != 'c' && s[end] != 'c' )
-                    res[0] = 'c';
-                else if(s[start] != 'a' && s[end] != 'a')
-                    res[0] = 'a';
-                else
-                    res[0] = 'b';
-                return new Tuple(1, res);
-            }
-            else {
-                res = new char[] {s[start], s[end]};
-                return new Tuple(2, res);
-            }
-        }
-
-        Tuple<Integer, char[]> res = new Tuple<>(Integer.MAX_VALUE, null);
+        canTable[charValue][start][end] = -1;
         for (int i = start; i < end; i++) {
-            Tuple<Integer, char[]> left = stringReductionRecursive(s, start, i);
-            Tuple<Integer, char[]> right = stringReductionRecursive(s, i + 1, end);
-            char [] l = left.get_second();
-            char [] r = right.get_second();
-
-            if (l[l.length - 1] != r[0]){
-
+            if ((can(s, start, i, u) && can(s, i+1, end, v))
+                    || (can(s, start, i, v) && can(s, i+1, end, u))) {
+                canTable[charValue][start][end] = 1;
             }
-            else{
-                if (res.get_first() > left.get_first() + right.get_first()){
-
-                }
-
-            }
-
         }
-        return null;
+
+        return canTable[charValue][start][end] > 0;
+    }
+
+    public static int stringReductionDP(String s){
+        int [][] table = new int[3][s.length()];
+        canTable = new int[3][s.length()][s.length()];
+        for (int ch = 0; ch <= 2; ch++) {
+
+            for (int i = 0; i < s.length(); i++) {
+
+                table[ch][i] = inf;
+                for (int j = 0; j <= i; j++) {
+
+                    if (can(s,j,i,(char)(ch + 'a'))){
+                        table[ch][i] = j == 0 ? 1 : Math.min(table[ch][i], table[ch][j-1] + 1);
+                    }
+                }
+            }
+        }
+        return Math.min(Math.min(table[0][s.length()-1],table[1][s.length()-1]),table[2][s.length()-1]);
     }
 }
