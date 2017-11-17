@@ -5,116 +5,68 @@ public class WireRemoval {
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
         int n = sc.nextInt();
-        TreeNode [] nodes = new TreeNode[n];
-        HashMap<Integer, List<Integer>> graph = new HashMap();
-        for (int i = 0; i < n - 1; i++) {
-            int u = sc.nextInt()-1;
-            int v = sc.nextInt()-1;
-            if (graph.containsKey(u))
-                graph.get(u).add(v);
-            else{
-                graph.put(u, new ArrayList<>());
-                graph.get(u).add(v);
-            }
+        HashMap<Integer, HashSet<Integer>> graph = new HashMap();
+        for (int i = 0; i < n-1; i++) {
+            int u = sc.nextInt();
+            int v = sc.nextInt();
 
-            if (graph.containsKey(v)){
-                graph.get(v).add(u);
-            }
-            else{
-                graph.put(v, new ArrayList<>());
-                graph.get(v).add(u);
-            }
+            if (!graph.containsKey(u))
+                graph.put(u, new HashSet());
+            graph.get(u).add(v);
+
+            if (!graph.containsKey(v))
+                graph.put(v, new HashSet());
+            graph.get(v).add(u);
         }
 
-        Queue<Integer> queue = new LinkedList<>();
-        queue.add(0);
-
-        while (queue.size() > 0){
-            int current = queue.poll();
-            if (nodes[current] != null)
-                continue;
-            if (nodes[current] == null)
-                nodes[current] = new TreeNode(current, 0, null);
-            for (int adj :
-                    graph.get(current)) {
-                if (nodes[adj] == null)
-                    nodes[adj] = new TreeNode(adj, nodes[current].depth + 1, nodes[current]);
-                else{
-                    nodes[adj].depth = nodes[current].depth + 1;
-                    nodes[adj].parent = nodes[current];
-                }
-                nodes[current].children.add(nodes[adj]);
-                queue.add(adj);
-            }
-        }
-
-        double res = wireRemoval(nodes[0], n);
+        double res = wireRemoval2(graph, n);
         System.out.println(res);
+
     }
 
+    public static double wireRemoval2(HashMap<Integer, HashSet<Integer>> graph, int n){
+        int [] depth = new int[n+1];
+        int [] subTreeCount = new int[n+1];
+        int [] parent = new int[n+1];
+        double prob = 0.0;
+        Queue<Integer> queue = new LinkedList();
 
-
-    public static float wireRemoval(TreeNode root, long n){
-        Queue<TreeNode> queue = new LinkedList<>();
-        queue.add(root);
-        long p = 0;
-        while(queue.size()>0){
-            TreeNode current = queue.poll();
-            p += current.depth;
-            for (TreeNode child :
-                    current.children) {
-                queue.add(child);
+        //Calculate dep and subTreeCount
+        CalculateDepthAndProb(graph, depth, subTreeCount, 1, parent);
+        for (int i = 1; i < depth.length; i++) {
+            prob += depth[i];
+        }
+        prob = 1.0 / prob;
+        queue.add(1);
+        double res = 0.0;
+        HashSet<Integer> visited = new HashSet<>();
+        while (queue.size() > 0){
+            int current = queue.poll();
+            res += depth[current] * prob * (n - subTreeCount[current]);
+            visited.add(current);
+            for (Integer next: graph.get(current)){
+                if (visited.contains(next))
+                    continue;
+                queue.add(next);
             }
         }
-        float prob = (float)p;
-        float res = 0.0f;
-        queue.add(root);
-        while(queue.size() > 0){
-            TreeNode current = queue.poll();
-
-            res += (current.depth / prob) * (n - current.getSubtreeNodesCount());
-
-
-            for (TreeNode child :
-                    current.children) {
-                queue.add(child);
-            }
-        }
-
         return res;
     }
 
-    static class TreeNode{
+    public static void CalculateDepthAndProb(HashMap<Integer, HashSet<Integer>> graph, int [] depth,
+                                             int [] subTreeCount, int current, int [] parent){
+        if (parent[current] == 0)
+            depth[current] = 0;
+        else
+            depth[current] = depth[parent[current]] + 1;
 
-        public int id;
-        public List<TreeNode> children;
-        public long depth;
-        private int subtreeNodesCount = 0;
-        public TreeNode parent;
-        public TreeNode(int idP, long depthP, TreeNode parentP){
-            children = new ArrayList<>();
-            id = idP;
-            depth = depthP;
-            parent = parentP;
-        }
-
-        public long getSubtreeNodesCount(){
-            if (subtreeNodesCount > 0)
-                return subtreeNodesCount;
-
-            if (children.size() == 0){
-                subtreeNodesCount = 1;
-            }
-            else{
-                for (TreeNode child :
-                        children) {
-                    subtreeNodesCount += child.getSubtreeNodesCount();
-                }
-                subtreeNodesCount++;
-            }
-
-            return subtreeNodesCount;
-
+        subTreeCount[current] = 1;
+        for (Integer next : graph.get(current)){
+            if (parent[next] > 0 || next == 1)
+                continue;
+            parent[next] = current;
+            CalculateDepthAndProb(graph, depth, subTreeCount, next, parent);
+            subTreeCount[current] += subTreeCount[next];
         }
     }
 }
