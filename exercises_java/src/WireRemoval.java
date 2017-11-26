@@ -6,55 +6,27 @@ public class WireRemoval {
         Scanner sc = new Scanner(System.in);
         int n = sc.nextInt();
         TreeNode [] nodes = new TreeNode[n];
-        HashMap<Integer, List<Integer>> graph = new HashMap();
+
+        //The input is not given as a tree but as a graph
+        //Read the graph and create the tree from the graph
         for (int i = 0; i < n - 1; i++) {
-            int u = sc.nextInt()-1;
-            int v = sc.nextInt()-1;
-            if (graph.containsKey(u))
-                graph.get(u).add(v);
-            else{
-                graph.put(u, new ArrayList<>());
-                graph.get(u).add(v);
-            }
+            int u = sc.nextInt() - 1;
+            int v = sc.nextInt() - 1;
 
-            if (graph.containsKey(v)){
-                graph.get(v).add(u);
-            }
-            else{
-                graph.put(v, new ArrayList<>());
-                graph.get(v).add(u);
-            }
+            if (nodes[u] == null)
+                nodes[u] = new TreeNode(u, 0,null);
+            if (nodes[v] == null)
+                nodes[v] = new TreeNode(v, nodes[u].depth + 1, nodes[u]);
+
+            nodes[u].children.add(nodes[v]);
         }
-
-        Queue<Integer> queue = new LinkedList<>();
-        queue.add(0);
-
-        while (queue.size() > 0){
-            int current = queue.poll();
-            if (nodes[current] != null)
-                continue;
-            if (nodes[current] == null)
-                nodes[current] = new TreeNode(current, 0, null);
-            for (int adj :
-                    graph.get(current)) {
-                if (nodes[adj] == null)
-                    nodes[adj] = new TreeNode(adj, nodes[current].depth + 1, nodes[current]);
-                else{
-                    nodes[adj].depth = nodes[current].depth + 1;
-                    nodes[adj].parent = nodes[current];
-                }
-                nodes[current].children.add(nodes[adj]);
-                queue.add(adj);
-            }
-        }
-
         double res = wireRemoval(nodes[0], n);
         System.out.println(res);
     }
 
 
 
-    public static float wireRemoval(TreeNode root, long n){
+    public static double wireRemoval(TreeNode root, long n){
         Queue<TreeNode> queue = new LinkedList<>();
         queue.add(root);
         long p = 0;
@@ -66,13 +38,13 @@ public class WireRemoval {
                 queue.add(child);
             }
         }
-        float prob = (float)p;
-        float res = 0.0f;
+        double prob = ((double)1)/p;
+        double res = 0.0;
         queue.add(root);
         while(queue.size() > 0){
             TreeNode current = queue.poll();
 
-            res += (current.depth / prob) * (n - current.getSubtreeNodesCount());
+            res += current.depth * prob * (n - current.getSubtreeNodesCount());
 
 
             for (TreeNode child :

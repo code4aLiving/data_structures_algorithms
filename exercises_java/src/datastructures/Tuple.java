@@ -16,4 +16,12 @@ public class Tuple<E,F> {
     public F get_second() {
         return _second;
     }
+
+    public void set_first(E value){
+        _first = value;
+    }
+
+    public void set_seccond(F value){
+        _second = value;
+    }
 }
