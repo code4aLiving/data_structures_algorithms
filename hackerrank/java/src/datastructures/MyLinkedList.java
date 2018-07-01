@@ -1,7 +1,4 @@
 package datastructures;
-
-import org.jetbrains.annotations.NotNull;
-
 import java.util.*;
 
 
@@ -206,7 +203,6 @@ public class MyLinkedList<T extends Comparable<T>> extends AbstractSequentialLis
         return 0;
     }
 
-    @NotNull
     @Override
     public Iterator<T> descendingIterator() {
         Iterator<T> it = new Iterator<T>() {

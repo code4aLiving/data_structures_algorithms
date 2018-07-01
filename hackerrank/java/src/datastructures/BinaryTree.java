@@ -1,6 +1,6 @@
 package datastructures;
 
-import org.jetbrains.annotations.NotNull;
+import com.sun.istack.internal.NotNull;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Spliterator;
@@ -26,7 +26,6 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T> {
         return false;
     }
 
-    @NotNull
     @Override
     public Iterator<T> iterator() {
         return null;

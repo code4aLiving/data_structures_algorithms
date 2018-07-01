@@ -26,14 +26,14 @@ public class Amazon {
         return stack.size() == 0 ? 1 : 0;
     }
 
-    static int countPairs(int[] numbers, int k) {
+    static int countPairs(int[] Integers, int k) {
         HashMap<Integer, Integer> hashMap = new HashMap();
-        for(int i=0; i < numbers.length; i++){
-            Integer number = numbers[i];
-            if(hashMap.containsKey(number))
-                hashMap.replace(number, hashMap.get(number)+1);
+        for(int i=0; i < Integers.length; i++){
+            Integer Integer = Integers[i];
+            if(hashMap.containsKey(Integer))
+                hashMap.replace(Integer, hashMap.get(Integer)+1);
             else
-                hashMap.put(number, 1);
+                hashMap.put(Integer, 1);
         }
 
         int pairs = 0;
@@ -49,24 +49,24 @@ public class Amazon {
         return pairs;
     }
 
-    public static int countPairs2(int [] numbers, int k){
+    public static int countPairs2(int [] Integers, int k){
         int e = 1000000;
         int [] arr = new int[2*e];
-        for (int i = 0; i < numbers.length; i++) {
-            arr[numbers[i] + e]++;
+        for (int i = 0; i < Integers.length; i++) {
+            arr[Integers[i] + e]++;
         }
-        Arrays.sort(numbers);
+        Arrays.sort(Integers);
         int pairs = 0;
-        for (int i = 0; i < numbers.length; i++) {
-            int min = Math.min(arr[numbers[i] + e], arr[numbers[i] + k + e]);
+        for (int i = 0; i < Integers.length; i++) {
+            int min = Math.min(arr[Integers[i] + e], arr[Integers[i] + k + e]);
             if(k == 0){
                 pairs += min/2;
-                arr[numbers[i] + e] -= min;
+                arr[Integers[i] + e] -= min;
             }
             else{
                 pairs += min;
-                arr[numbers[i] + e] -= min;
-                arr[numbers[i] + k + e] -= min;
+                arr[Integers[i] + e] -= min;
+                arr[Integers[i] + k + e] -= min;
             }
         }
         return pairs;
@@ -88,17 +88,17 @@ public class Amazon {
         return pairs;
     }
 
-    public static int countPairsBruteForce(int[] numbers, int k){
+    public static int countPairsBruteForce(int[] Integers, int k){
         int res = 0;
         HashSet<Integer> visited = new HashSet<>();
-        Arrays.sort(numbers);
-        for (int i = 0; i < numbers.length; i++) {
+        Arrays.sort(Integers);
+        for (int i = 0; i < Integers.length; i++) {
             if (visited.contains(i))
                 continue;
-            for (int j = i + 1; j < numbers.length; j++) {
+            for (int j = i + 1; j < Integers.length; j++) {
                 if (visited.contains(j))
                     continue;
-                if (Math.abs(k) == Math.abs(numbers[i]-numbers[j])){
+                if (Math.abs(k) == Math.abs(Integers[i]-Integers[j])){
                     res++;
                     visited.add(j);
                     visited.add(i);

@@ -1,6 +1,6 @@
 package datastructures;
 
-import org.jetbrains.annotations.NotNull;
+import com.sun.istack.internal.NotNull;
 
 public abstract class Node<T extends Comparable<T>> implements Comparable<Node<T>>
 {
