@@ -1,7 +1,5 @@
 package datastructures;
 
-import com.sun.istack.internal.NotNull;
-
 public abstract class Node<T extends Comparable<T>> implements Comparable<Node<T>>
 {
     protected T _value;
@@ -18,7 +16,7 @@ public abstract class Node<T extends Comparable<T>> implements Comparable<Node<T
     }
 
     @Override
-    public boolean equals(@NotNull Object other){
+    public boolean equals(Object other){
         Node<T> node = (Node<T>)other;
         return _value.equals(node.get_value());
     }
@@ -29,7 +27,7 @@ public abstract class Node<T extends Comparable<T>> implements Comparable<Node<T
     }
 
     @Override
-    public int compareTo(@NotNull Node<T> other) {
+    public int compareTo(Node<T> other) {
         return _value.compareTo(other.get_value());
     }
 }

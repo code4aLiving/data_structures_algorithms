@@ -1,6 +1,7 @@
 package algorithms;
 
 import datastructures.GraphNode;
+import datastructures.Tuple;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.*;
@@ -8,7 +9,7 @@ import java.util.*;
 
 public class GraphAlgorithms {
 
-    public static HashMap<Integer,HashSet<Integer>> load_undirected_graph(String text)
+    public static HashMap<Integer, HashSet<Integer>> load_undirected_graph(String text)
             throws IOException {
 
         ByteArrayInputStream inStream = new ByteArrayInputStream(text.getBytes());
@@ -41,6 +42,24 @@ public class GraphAlgorithms {
             add_edge(u, v, graph);
             if (!graph.containsKey(v))
                 graph.put(v, new HashSet<>());
+        }
+        return graph;
+    }
+
+    public static Map<Integer, Set<Tuple<Integer, Integer>>> loadDirectedWeightedGraph(String text) throws IOException {
+        ByteArrayInputStream inStream = new ByteArrayInputStream(text.getBytes());
+        BufferedReader br = new BufferedReader(new InputStreamReader(inStream));
+        int edges = Integer.parseInt(br.readLine().trim());
+
+        Map<Integer, Set<Tuple<Integer, Integer>>> graph = new HashMap<>();
+        for (int i = 0; i < edges; i++) {
+            String [] line = br.readLine().split(" ");
+            Integer u = Integer.parseInt(line[0]);
+            Integer v = Integer.parseInt(line[1]);
+            Integer w = Integer.parseInt(line[2]);
+
+            if (!graph.containsKey(u)) graph.put(u, new HashSet<>());
+            graph.get(u).add(Tuple.build(v, w));
         }
         return graph;
     }
@@ -144,5 +163,52 @@ public class GraphAlgorithms {
             }
         }
         return topSort;
+    }
+
+    static int[][] dijkstra(final int n, final int s, final Map<Integer, Set<Tuple<Integer, Integer>>> graph) {
+        final int[] distance = new int[n + 1];
+        final int[] prev = new int[n + 1];
+        final boolean[] visited = new boolean[n + 1];
+
+        for (int i = 1; i < distance.length; i++) {
+            distance[i] = Integer.MAX_VALUE;
+        }
+        distance[s] = 0;
+
+        // Priority queue of tuples <Distance to origin, Vertex>
+        PriorityQueue<Tuple<Integer, Integer>> priorityQueue = new PriorityQueue<>();
+        priorityQueue.add(Tuple.build(0, s));
+
+        while(priorityQueue.size() > 0) {
+            Tuple<Integer, Integer> du = priorityQueue.poll();
+            int u = du.second;
+            if (visited[u]) continue;
+
+            //Once a vertex has been extracted from the queue it reached its optimum
+            visited[u] = true;
+
+            for (Tuple<Integer, Integer> uv: graph.get(u)) {
+                int v = uv.first;
+                int weightuv = uv.second;
+                // In the graph each tuple is an edge <vertex, weight>
+                if (relax(u, v, weightuv, distance, prev)) {
+                    //We could relax U ~> V
+                    // Add v back to the priority queue with the new updated distance.
+                    // It would be better to do decrease key but that's not available in java's priority queue
+                    priorityQueue.add(Tuple.build(distance[v], v));
+                }
+            }
+        }
+
+        return new int[][] {distance, prev};
+    }
+
+    static boolean relax(int u, int v, int weightuv, int[] distance, int[] prev) {
+        if (distance[v] > distance[u] + weightuv) {
+            distance[v] = distance[u] + weightuv;
+            prev[v] = u;
+            return true;
+        }
+        return false;
     }
 }
