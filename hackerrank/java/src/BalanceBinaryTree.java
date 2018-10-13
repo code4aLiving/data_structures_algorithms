@@ -1,5 +1,3 @@
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -95,7 +93,7 @@ public class BalanceBinaryTree {
              * Return then visit the children
              * Use a stack
              */
-            throw new NotImplementedException();
+            throw new RuntimeException();
         }
 
         public Iterator<BinaryTreeNode> postOrder(){
@@ -103,7 +101,7 @@ public class BalanceBinaryTree {
              * Visit the children first then return
              * Use a stack
              */
-            throw new NotImplementedException();
+            throw new RuntimeException();
         }
 
         public Iterator<BinaryTreeNode> inOrder(){
@@ -111,7 +109,7 @@ public class BalanceBinaryTree {
              * Visit the left, return, then visit right
              * Use a stack
              */
-            throw new NotImplementedException();
+            throw new RuntimeException();
         }
 
         public Iterator<BinaryTreeNode> byLevels(){
@@ -119,7 +117,7 @@ public class BalanceBinaryTree {
              * A BFS
              * Use a queue
              */
-            throw new NotImplementedException();
+            throw new RuntimeException();
         }
     }
 }

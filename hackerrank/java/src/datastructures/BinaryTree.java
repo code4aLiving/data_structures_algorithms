@@ -1,6 +1,5 @@
 package datastructures;
 
-import com.sun.istack.internal.NotNull;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Spliterator;
@@ -35,11 +34,11 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T> {
         return false;
     }
 
-    public boolean containsAll(@NotNull Collection<?> c) {
+    public boolean containsAll(Collection<?> c) {
         return false;
     }
 
-    public boolean removeAll(@NotNull Collection<?> c) {
+    public boolean removeAll(Collection<?> c) {
         return false;
     }
 

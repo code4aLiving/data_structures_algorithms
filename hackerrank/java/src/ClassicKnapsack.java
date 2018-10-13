@@ -1,4 +1,3 @@
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * Created by sergio on 24/08/17.
@@ -27,6 +26,6 @@ public class ClassicKnapsack {
     }
 
     public static int[] items_max_profit(int [] weights, int [] values, int capacity){
-        throw new NotImplementedException();
+        throw new RuntimeException();
     }
 }

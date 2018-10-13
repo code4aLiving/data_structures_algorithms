@@ -1,4 +1,4 @@
-import com.sun.istack.internal.NotNull;
+
 
 import java.util.Arrays;
 import java.util.Scanner;
@@ -70,7 +70,7 @@ public class BuyMaximumStocks {
 
 
         @Override
-        public int compareTo(@NotNull BuyMaximumStocks.Tuple o) {
+        public int compareTo(BuyMaximumStocks.Tuple o) {
             if (_a < o.get_a())
                 return -1;
             if (_a > o.get_a())

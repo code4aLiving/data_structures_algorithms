@@ -2,7 +2,6 @@ package algorithms;
 
 import datastructures.GraphNode;
 import datastructures.Tuple;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.*;
 import java.util.*;
@@ -111,7 +110,7 @@ public class GraphAlgorithms {
     }
 
     public static <T> List<T> topologicalSortKarp(HashMap<T, HashSet<T>> graph){
-        throw new NotImplementedException();
+        throw new RuntimeException();
     }
 
     public static <T extends Comparable<T>> List<T> dfs(GraphNode<T> startNode){
