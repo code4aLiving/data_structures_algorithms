@@ -35,6 +35,20 @@ public class NumberTheory {
         return primes;
     }
 
+    public static List<Integer> primeFactorization(int [] primes, int n) {
+        final List<Integer> res = new ArrayList<>();
+        int i = 0;
+        while(n > 1 && i < primes.length && primes[i] <= n) {
+            if (n % primes[i] == 0) {
+                n /= primes[i];
+                res.add(primes[i]);
+            }
+            else
+                i++;
+        }
+        return res;
+    }
+
     public static int gcd(int p, int q) throws Exception {
         throw new Exception();
     }

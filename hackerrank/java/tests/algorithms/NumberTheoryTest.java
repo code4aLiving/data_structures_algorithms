@@ -6,6 +6,7 @@ import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -44,5 +45,14 @@ public class NumberTheoryTest {
 
     @Test
     public void mcm() {
+    }
+
+    @Test
+    public void primeFactorization() throws Exception {
+        int n = 12;
+        int[] primes = {2, 3, 5, 7, 11, 13};
+        List<Integer> actual = NumberTheory.primeFactorization(primes, n);
+        List<Integer> expected = Arrays.asList(2, 2, 3);
+        assertEquals(expected, actual);
     }
 }

@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 /**
  * Created by sergio on 06/08/17.
  */
@@ -200,5 +202,20 @@ public class MyUtils {
             res[i] = arr[i] + temp[i];
         }
         return res;
+    }
+
+    public static int[] readIntArray(Scanner sc) {
+        int n = sc.nextInt();
+        int[] res = new int[n];
+        for (int i = 0; i < n; i++) {
+            res[i] = sc.nextInt();
+        }
+        return res;
+    }
+
+    public static <T> void outputArrayVertically(T[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            System.out.println(arr[i]);
+        }
     }
 }

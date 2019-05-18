@@ -1,3 +1,6 @@
 *.swo
 *.swp
 hackerrank/java/target/
+hackerrank/java/.idea
+*/*/.idea
+*/.idea
